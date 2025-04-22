@@ -43,3 +43,19 @@ jobs:
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+
+    - name: Set up Maven settings
+      run: |
+        mkdir -p ~/.m2
+        echo "<settings>
+                <servers>
+                    <server>
+                        <id>github</id>
+                        <username>your-username</username>
+                        <password>${{ secrets.GH_TOKEN }}</password>
+                    </server>
+                </servers>
+              </settings>" > ~/.m2/settings.xml
+
+    - name: Deploy to GitHub Packages
+      run: mvn deploy -DskipTests
